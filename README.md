@@ -6,3 +6,7 @@ Current methods support learning BPEC-DAGs (blocked, properly edge-colored DAGs)
 To generate a random BPEC-DAG you may use the function e_coloredDAGmodel() in coloredDAGgenerator.py. 
 
 To learn a BPEC-DAG from data, you may use the GECS (Greedy Edge-Colored Search) algorithm gecs() in ecDAGlearn.py.  Data should be in the form of an numpy array. The output of gecs() is a list in which the first element is the transpose of the adjacency matrix of the learned DAG.  The second element is the learned edge-coloring stored as a dictionary of color classes. Each edge in the dictionary is stored as a list where the first element of the list is the head node of the edge.
+
+BPEC-DAGs and the GECS algorithm implemented here are introduced in the paper: 
+
+T. Boege, K. Kubjas, P. Misra and L. Solus. ''Colored Gaussian DAG models.'' arXiv preprint: arXiv:2404.04024 (2024).
