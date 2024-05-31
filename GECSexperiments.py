@@ -101,8 +101,10 @@ num_samples = 1000
 # in the family so that each color class can have at least two elements.
 # Giving a list of different number of colors runs the above experimental settings for
 # each coloring number in the list.
-colorcounts = [2, 3, 4, 5, 6, 7, 8, 9]
+colorcounts = [2, 3, 4, 5, 6, 7, 8, 9] # for experiments on 10 nodes
+# colorcounts = [2, 3, 4, 5] # for experiments on 6 nodes
 num_colors = len(colorcounts)
+
 # choose a list of probabilities of an edge between two nodes in the underlying
 # (uncolored) DAGs to be generated.  Note that if minparents > 1 then edges may be
 # added at random to the ER-DAG generated with the specified probability until each
@@ -110,8 +112,8 @@ num_colors = len(colorcounts)
 probs = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 num_probs = len(probs)
 
-# Seeds for data-generation (seed 42 used for exps on 10 nodes dagloop2)
-seed = 42
+# Seeds for data-generation (seed 57 used for exps on 10 nodes dagloop2)
+seed = 57
 random.seed(seed)
 rng = default_rng(seed)
 seeds = np.array(
@@ -169,7 +171,7 @@ for c_idx in range(num_colors):
             GES_TNR[c_idx][pr_idx][idx] = edgeTNR(ges_graph.T, graph - np.eye(num_nodes))
 
             np.savez(
-                "gecs_exp_results.npz",
+                "gecs_exp_results_10_nodes_1000.npz",
                 GECS_graphs=GECS_graphs,
                 GECS_colorings=GECS_colorings,
                 GECS_shd=GECS_shd,

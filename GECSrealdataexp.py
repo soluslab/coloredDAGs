@@ -6,12 +6,11 @@ from ecDAGlearn import gecs
 # Red Wine quality data:
 
 #import data set
-wine_data = pd.read_csv('~wine+quality/winequality-red.csv', delimiter=';')
+wine_data = pd.read_csv('wine+quality/winequality-red.csv', delimiter=';')
 
 
 #convert to np array and store column indices:
-wine_variables =wine_data.columns
-wine_variables = wine_variables.pop(11)
+wine_variables =wine_data.columns[:-1]
 wine_data_np = wine_data.to_numpy()
 wine_data_np = wine_data_np[:, :-1]
 
@@ -20,7 +19,7 @@ wineGECSgraph, wineGECScoloring = gecs(wine_data_np)
 
 #store results
 np.savez(
-        "wine_GECS_results.npz",
+        "r_wine_GECS_results.npz",
         wineGECSgraph=wineGECSgraph,
         wineGECScoloring=wineGECScoloring,
         winevariables=wine_variables
@@ -30,12 +29,11 @@ np.savez(
 # White Wine quality data:
 
 #import data set
-w_wine_data = pd.read_csv('~wine+quality/winequality-white.csv', delimiter=';')
+w_wine_data = pd.read_csv('wine+quality/winequality-white.csv', delimiter=';')
 
 
 #convert to np array and store column indices:
-w_wine_variables = w_wine_data.columns
-w_wine_variables = w_wine_variables.pop(11)
+w_wine_variables = w_wine_data.columns[:-1]
 w_wine_data_np = w_wine_data.to_numpy()
 w_wine_data_np = w_wine_data_np[:, :-1]
 
@@ -55,7 +53,7 @@ np.savez(
 # Sachs observational data:
 
 #import observational data set
-sachs_obs_data = pd.read_csv('~sachs_obs_data.csv')
+sachs_obs_data = pd.read_csv('sachs_obs_data.csv')
 
 
 #convert to np array and store column indices:

@@ -415,3 +415,82 @@ def splitColor(A, coloring, samples):
             newcoloring.update({new_key: bestnew_colorclass})
 
     return B, newcoloring
+
+# remove a color class:
+def removeColor(A, coloring, samples):
+    B = copy.deepcopy(A)
+    newcoloring = copy.deepcopy(coloring)
+
+    coloringkeys = list(newcoloring.keys())
+    colorremovals = []
+
+    for c in coloringkeys:
+        colorclass = newcoloring[c]
+        for edge in colorclass:
+            B[edge[0], edge[1]] = 0
+        del newcoloring[c]
+        BIC = score(samples, B, newcoloring)
+        colorremovals += [[B, newcoloring, BIC]]
+        for edge in colorclass:
+            B[edge[0], edge[1]] = 1
+        newcoloring.update({c: colorclass})
+
+    if len(colorremovals) > 0:
+        best = 0
+        BIC = colorremovals[0][2]
+        for i in range(len(colorremovals)):
+            if colorremovals[i][2] > BIC:
+                best = i
+                BIC = colorremovals[i][2]
+        bestB = colorremovals[best][0]
+        bestnewcoloring = colorremovals[best][1]
+    else:
+        bestB = B
+        bestnewcoloring = newcoloring
+
+    return bestB, bestnewcoloring
+
+# flip a color class:
+def flipColor(A, coloring, samples):
+    B = copy.deepcopy(A)
+    newcoloring = copy.deepcopy(coloring)
+
+    coloringkeys = list(newcoloring.keys())
+    colorflips = []
+
+    for c in coloringkeys:
+        colorclass = newcoloring[c]
+        cparents = [ edge[1] for edge in colorclass]
+        originalchild = colorclass[0][0]
+        for newchild in cparents:
+            newparents = [p for p in cparents if p != newchild] + [originalchild]
+            newcolorclass = [[newchild, p] for p in newparents]
+            newcoloring.update({c: newcolorclass})
+            for edge in colorclass:
+                B[edge[0], edge[1]] = 0
+            for edge in newcolorclass:
+                B[edge[0], edge[1]] = 1
+            if acyclic(B) == 0:
+                BIC = score(samples, B, newcoloring)
+                colorflips += [[c, newcolorclass, B, BIC]]
+            for edge in colorclass:
+                B[edge[0], edge[1]] = 1
+            for edge in newcolorclass:
+                B[edge[0], edge[1]] = 0
+            newcoloring.update({c: colorclass})
+
+    if len(colorflips) > 0:
+        best = 0
+        BIC = colorflips[0][3]
+        for i in range(len(colorflips)):
+            if colorflips[i][3] > BIC:
+                best = i
+                BIC = colorflips[i][3]
+        bestc = colorflips[best][0]
+        bestnewcolorclass = colorflips[best][1]
+        bestB = colorflips[best][2]
+        newcoloring.update({bestc: bestnewcolorclass})
+    else:
+        bestB = B
+
+    return bestB, newcoloring

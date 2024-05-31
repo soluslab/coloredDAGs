@@ -83,15 +83,15 @@ def score(samples, A, coloring):
     B, omegas = full_mle(samples, A, coloring)
     K = np.diag(1 / omegas)
     I_B = np.eye(numnodes) - B
-    log_term = numsamples * np.log(omegas.prod())
+    log_term = -numsamples * np.log(np.linalg.det(np.linalg.inv(I_B) @ np.diag(omegas) @ np.linalg.inv(I_B.T)))
 
-    inv_cov = I_B @ K @ I_B.T
+    inv_cov = I_B.T @ K @ I_B
     cov_term = 0
     for i, x in enumerate(centeredSamples):
         cov_term += x @ inv_cov @ x
-    likelihood = log_term + cov_term
+    likelihood = log_term + (-1/2) * cov_term
 
-    l0_term = (1 / 2) * (numcolors + numnodes)*(numsamples)
-    score = likelihood - l0_term
+    l0_term = (1 / 2) * (numcolors + numcolors)*(np.log(numsamples))
+    score = (likelihood - l0_term)
 
     return score

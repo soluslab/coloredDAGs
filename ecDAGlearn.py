@@ -8,11 +8,14 @@ moveEdge,
 reverseEdge,
 mergeColors,
 removeEdge,
-splitColor
+splitColor,
+removeColor
 )
+
 
 # loop over phases:
 def ecDAGloop(samples, A, coloring, BIC):
+
     same = 0
     while same == 0:
         proposalA, proposalc = addColor(A, coloring, samples)
@@ -28,7 +31,6 @@ def ecDAGloop(samples, A, coloring, BIC):
             A = proposalA
             coloring = proposalc
             BIC = proposalBIC
-
         else:
             same = 1
 
@@ -55,6 +57,13 @@ def ecDAGloop(samples, A, coloring, BIC):
             A = proposalA
             coloring = proposalc
             BIC = proposalBIC
+
+        proposalA, proposalc = removeEdge(A, coloring, samples)
+        proposalBIC = score(samples, proposalA, proposalc)
+        if proposalBIC > BIC:
+            A = proposalA
+            coloring = proposalc
+            BIC = proposalBIC
         else:
             same = 1
 
@@ -67,7 +76,7 @@ def ecDAGloop(samples, A, coloring, BIC):
             coloring = proposalc
             BIC = proposalBIC
 
-        proposalA, proposalc = removeEdge(A, coloring, samples)
+        proposalA, proposalc = removeColor(A, coloring, samples)
         proposalBIC = score(samples, proposalA, proposalc)
         if proposalBIC > BIC:
             A = proposalA
@@ -97,6 +106,3 @@ def gecs(samples):
             copyA = copy.deepcopy(newA)
 
     return copyA, copycoloring
-
-
-
